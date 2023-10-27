@@ -12,14 +12,17 @@
 <script>
 import {auth} from '../firebase/config'
 import {GoogleAuthProvider,signInWithPopup} from 'firebase/auth'
+import { useRouter } from 'vue-router'
 export default{
 
 
   setup() {
+    const router=useRouter()
     const handleLogin=()=>{
       const provider=new GoogleAuthProvider()
       signInWithPopup(auth,provider)
       .then(sonuc=>{
+        router.push({name:"Home"})
         console.log(sonuc)
       })
     }
