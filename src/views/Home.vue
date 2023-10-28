@@ -1,14 +1,21 @@
 <template>
-  <div class="home">
-   <h1>aos sosyal</h1>
-  </div>
+  
 </template>
 
 <script>
+import { db } from '@/firebase/config';
+import { collection,onSnapshot } from 'firebase/firestore';
+import { ref } from 'vue';
 
 
 export default {
-  name:'Home'
+  name:'Home',
+  setup(){
+const gonderiler=ref([])
+onSnapshot(collection(db,"gonderiler"),(snap)=>{
+  console.log(snap.docs)
+})
+  }
 
 }
 </script>
