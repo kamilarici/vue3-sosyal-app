@@ -8,30 +8,24 @@
     <div class="row">
       <div class="col-sm-8 mb-3">
         <div class="card">
-          <div class="card-header text-end">tarih</div>
+          <div class="card-header text-end">{{tarih}}</div>
           <div class="card-body text-center">
-            <h5 class="card-title">Gönderi</h5>
-            <p class="card-text">Kullanici Ad</p>
+            <h5 class="card-title">{{gonderi}}</h5>
+            <p class="card-text">{{kullaniciAd}}</p>
           </div>
-          <ul class="list-group list-group-flush">
+          <ul class="list-group list-group-flush" v-if="yorumlar.length !==0">
             <li
-              class="list-group-item d-flex-justify-content-between align-items-start"
+            v-for="y in yorumlar" :key="y.yorum"
+              class="list-group-item d-flex justify-content-between align-items-start"
             >
               <div class="ms-2 me-auto">
-                <div class="fw-bold">Yorum 1</div>
+                <div class="fw-bold">{{y.yorum}}</div>
               </div>
-              <span class="badge bg-primary mx-2">kullanici ad</span>
+              <span class="badge bg-primary mx-2">{{y.yKullaniciAd}}</span>
             </li>
-            <li
-              class="list-group-item d-flex-justify-content-between align-items-start"
-            >
-              <div class="ms-2 me-auto">
-                <div class="fw-bold">Yorum 1</div>
-              </div>
-              <span class="badge bg-primary mx-2">kullanici ad</span>
-            </li>
+           
           </ul>
-          <ul class="list-group list-group-flush">
+          <ul class="list-group list-group-flush" v-if="yorumlar.length ==0">
             <li class="list-group-item">henüz yorum yapilmadi</li>
           </ul>
         </div>
@@ -69,8 +63,9 @@ import moment from "moment";
 
 export default {
   setup() {
-    const { kullanici } = getUser();
-    const route = useRoute();
+      const { kullanici } = getUser();
+      const route = useRoute();
+      moment.locale('tr')
     // console.log(route.params.id)
     const yorumText = ref("");
     const gonderi = ref("");
@@ -92,7 +87,7 @@ export default {
 
 onSnapshot(gonderiRef,(snap)=>{
 gonderi.value=snap.data().gonderi
-tarih.value=moment(snap.data().tarih.toDate()).calendar
+tarih.value=moment(snap.data().tarih.toDate()).calendar()
 kullaniciAd.value=snap.data().gKullaniciAd
 yorumlar.value=snap.data().yorumlar
 })
