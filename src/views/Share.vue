@@ -10,30 +10,16 @@
         <hr>
         <div class="mb-3">
             <ol class="list-group list-group-numbered">
-                <li class="list-group-item d-flex justify-content-center align-items-start">
+                <li v-for="g in gonderiler" :key="g.id" class="list-group-item d-flex justify-content-center align-items-start">
                     <div class="ms-2 me-auto">
-                        <div class="fw-bold">Birinci Entry</div>
-                        Tarih
+                        <div class="fw-bold">{{g.gonderi}}</div>
+                        {{g.tarih}}
                     </div>
-                    <span class="badge bg-primary rounded-pill">Yorum Sayisi</span>
+                    <span class="badge bg-primary rounded-pill">{{g.yorumlar.length}}</span>
+                    <span @click="handleDelete(g.id)" class="badge bg-danger mx-2"><i class="bi bi-x"></i></span>
 
                 </li>
-                <li class="list-group-item d-flex justify-content-center align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Ikinci Entry</div>
-                        Tarih
-                    </div>
-                    <span class="badge bg-primary rounded-pill">Yorum Sayisi</span>
-
-                </li>
-                <li class="list-group-item d-flex justify-content-center align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Üçüncü Entry</div>
-                        Tarih
-                    </div>
-                    <span class="badge bg-primary rounded-pill">Yorum Sayisi</span>
-
-                </li>
+           
                 
             </ol>
         </div>
@@ -41,9 +27,9 @@
     </div>
 </template>
 <script>
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 import getUser from '@/composables/getUser'; 
-import { getDoc,collection,serverTimestamp, addDoc } from 'firebase/firestore';
+import { getDoc,collection,serverTimestamp, addDoc,onSnapshot,query,where, deleteDoc,doc} from 'firebase/firestore';
 import { db } from '@/firebase/config';
 export default {
     setup() {
@@ -51,18 +37,42 @@ export default {
 
         const {kullanici}=getUser()
         const gonderi=ref('')
+        const gonderiler=ref([])
         const handleClick=async()=>{
             if(kullanici.value){
                 await addDoc(collection(db,'gonderiler'),{
                     gKullaniciAd:kullanici.value.displayName,
                     gonderi:gonderi.value,
-                    tarih:serverTimestamp,
+                    tarih:serverTimestamp(),
                     yorumlar:[]
                 })
+                gonderi.value=''
             }
         }
-        return {gonderi,handleClick}
-    },
+
+const handleDelete=async(id)=>{
+    // console.log(id)
+    await deleteDoc(doc(db,"gonderiler",id))
+}
+
+onMounted(()=>{
+
+    const q=query(collection(db,'gonderiler'),where('gKullaniciAd',"==",kullanici.value.displayName))
+
+    onSnapshot(q,querySnapshot=>{
+        const dizi=[]
+
+        querySnapshot.forEach(doc=>{
+            dizi.push({...doc.data(),id:doc.id})
+
+        })
+        gonderiler.value=dizi;
+    } )
+})
+
+
+        return {gonderi,handleClick,gonderiler ,handleDelete}
+    }, 
 }
 </script>
 <style scoped>
