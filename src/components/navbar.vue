@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg   bg-light" >
     <div class="container">
-      <a class="navbar-brand" href="#">AOS sosyall </a>
+      <a class="navbar-brand" href="/">AOS sosyall </a>
       <button
         class="navbar-toggler"
         type="button"

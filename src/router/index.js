@@ -5,6 +5,7 @@ import { auth } from '../firebase/config'
 import Home from '../views/Home.vue'
 import Login from '@/views/Login.vue'
 import Share from '@/views/Share.vue'
+import Browse from '@/views/Browse.vue'
 
 
 //! path ile gitmemesi için user giriş yapmış mı kontrol edip route a eklediğimizde bu fonksiyon beforeEnter ile çalışıp gerekli yönlendirmeyi yapacak
@@ -29,6 +30,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/browse/:id',
+    name: 'Browse',
+    component: Browse
   },
   {
     path: '/share',
