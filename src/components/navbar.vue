@@ -15,7 +15,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
           <li class="nav-item" v-show="kullanici">
-            <a class="nav-link active" aria-current="page" href="#">paylaş</a>
+            <router-link to="/share"><a class="nav-link active" aria-current="page" href="#">paylaş</a></router-link>
           </li>
         </ul>
           <div class="d-flex" >
