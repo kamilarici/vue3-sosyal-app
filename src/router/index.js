@@ -1,7 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
+import { auth } from '../firebase/config'
+
 import Home from '../views/Home.vue'
 import Login from '@/views/Login.vue'
 import Share from '@/views/Share.vue'
+
+
+//! path ile gitmemesi için user giriş yapmış mı kontrol edip route a eklediğimizde bu fonksiyon beforeEnter ile çalışıp gerekli yönlendirmeyi yapacak
+const kullniciKontrol=(to,from,next)=>{
+  let kullanici=auth.currentUser;
+if(!kullanici){
+  next({name:"Login"})
+}else{
+  next()
+}
+
+}
+
 
 const routes = [
   {
@@ -17,7 +33,8 @@ const routes = [
   {
     path: '/share',
     name: 'Share',
-    component: Share
+    component: Share,
+    beforeEnter: kullniciKontrol
   },
  
 ]
